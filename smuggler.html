@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>Güvenli Belge İndirme</title>
+</head>
+<body>
+    <h1>Belge Hazırlanıyor...</h1>
+    <p>Lütfen indirme işlemi otomatik başlamazsa aşağıdaki butona tıklayın.</p>
+    <button id="downloadBtn">Dosyayı İndir</button>
+
+    <script>
+        function smuggle() {
+            // 1. ADIM: Dosya İçeriğini Hazırla (Payload)
+            // Gerçek saldırıda burası base64 encoded bir EXE veya zararlı script olurdu.
+            // Eğitim için basit bir metin kullanıyoruz.
+            var fileContent = "Bu dosya internetten indirilmedi, tarayıcınızın içinde JavaScript ile oluşturuldu!\n\nHTML Smuggling Demo - Purple Team Egitimi";
+            var fileName = "guvenli_not.txt";
+
+            // 2. ADIM: Blob (Binary Large Object) Oluşturma
+            // Veriyi tarayıcı hafızasında bir dosya objesine çeviriyoruz.
+            var myBlob = new Blob([fileContent], {type: "text/plain"});
+
+            // 3. ADIM: Sanal Bir URL Yaratma
+            // Tarayıcı bu Blob objesine erişmek için geçici bir URL üretir (blob:https://...)
+            var url = window.URL.createObjectURL(myBlob);
+
+            // 4. ADIM: Gizli İndirme Linki Oluşturma ve Tıklama
+            var a = document.createElement("a");
+            a.href = url;
+            a.download = fileName;
+            document.body.appendChild(a); // Linki DOM'a ekle
+            a.click(); // Otomatik tıkla
+            
+            // Temizlik: Linki kaldır ve URL'i serbest bırak
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+        }
+
+        // Sayfa yüklendiğinde veya butona tıklandığında çalıştır
+        document.getElementById("downloadBtn").onclick = smuggle;
+        
+        // Opsiyonel: Sayfa açılır açılmaz otomatik tetikle
+        // setTimeout(smuggle, 1000); 
+    </script>
+</body>
+</html>
